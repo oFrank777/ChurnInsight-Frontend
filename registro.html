@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChurnInsight - Registro de Cliente</title>
+    <!-- Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CSS Unificado -->
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/registro.css">
+</head>
+
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="dashboard.html">
+                <span class="me-2">⚡</span> ChurnInsight
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav gap-2 align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="registro.html">Nuevo Cliente</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="predictor.html">Predictor</a>
+                    </li>
+                    <li class="nav-item ms-lg-3">
+                        <button onclick="sessionStorage.clear(); window.location.href='index.html'"
+                            class="btn btn-outline-glass btn-sm rounded-pill px-3">Salir</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div style="height: 100px;"></div> <!-- Spacer -->
+
+    <div class="container mb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card card-glass reveal">
+                    <div class="card-body">
+                        <h4 class="fw-bold mb-4">Registro de Suscriptores</h4>
+                        <p class="text-muted small">Ingresa datos de más suscriptores para alimentar el modelo de
+                            predicción.</p>
+                        <hr>
+
+                        <!--FORM-->
+                        <form id="registroForm">
+                            <h6 class="text-primary fw-bold mb-3">Perfil del Suscriptor</h6>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">ClienteID</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">#</span>
+                                        <input type="number" id="ClienteID" class="form-control bg-light" readonly>
+                                    </div>
+                                    <div class="form-text text-muted">Generado automáticamente por el sistema.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small">Género</label>
+                                    <select id="Genero" class="form-select">
+                                        <option value="Masculino">Masculino</option>
+                                        <option value="Femenino">Femenino</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small">Plan</label>
+                                    <select id="plan" class="form-select">
+                                        <option value="Basico">Basico</option>
+                                        <option value="Estandar">Estandar</option>
+                                        <option value="Premium">Premium</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small">Antigüedad en meses</label>
+                                    <input type="number" id="tiempo_meses" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <h6 class="text-primary fw-bold mb-3">Actividad de Usuario</h6>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <label class="form-label small">Horas de uso en el ùltimo mes</label>
+                                    <input type="number" step="0.01" id="uso_mensual_horas" class="form-control"
+                                        required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small">Meses de retraso</label>
+                                    <input type="number" id="retrasos_pago" class="form-control" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small">Soporte Tickets</label>
+                                    <input type="number" id="soporte_tickets" class="form-control" required>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-check form-switch mt-2">
+                                        <input class="form-check-input" type="checkbox" id="pago_automatico">
+                                        <label class="form-check-label">¿Cuenta con pago automático?</label>
+                                    </div>
+                                    <div class="form-check form-switch mt-2">
+                                        <input class="form-check-input" type="checkbox" id="cambio_plan">
+                                        <label class="form-check-label">¿Ha cambiado de plan recientemente?</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary-gradient btn-lg">Registrar Cliente</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/registroapp.js"></script>
+</body>
+
+</html>

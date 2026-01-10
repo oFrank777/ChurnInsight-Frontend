@@ -1,0 +1,172 @@
+:root {
+    --primario: #818cf8;
+    --primario-oscuro: #6366f1;
+    --acento: #f472b6;
+    --peligro: #ef4444;
+    --exito: #22c55e;
+    --advertencia: #f59e0b;
+    --fondo: #0f172a;
+    --fondo-tarjeta: rgba(30, 41, 59, 0.7);
+    --texto: #f8fafc;
+    --vidrio: rgba(30, 41, 59, 0.5);
+    --borde: rgba(255, 255, 255, 0.1);
+    --inter: 'Inter', -apple-system, sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: radial-gradient(circle at top right, #1e1b4b, #0f172a) !important;
+    font-family: var(--inter) !important;
+    color: var(--texto) !important;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(circle at 20% 50%, rgba(129, 140, 248, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(244, 114, 182, 0.08) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+}
+
+/* Transiciones globales */
+.card,
+.btn,
+.form-control,
+.nav-link {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Navbar unificada */
+.navbar {
+    background: rgba(15, 23, 42, 0.95) !important;
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--borde);
+    z-index: 1000;
+}
+
+.navbar-brand {
+    background: linear-gradient(135deg, #818cf8, #f472b6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800 !important;
+}
+
+.nav-link {
+    color: #cbd5e1 !important;
+    position: relative;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--primario);
+    transform: translateX(-50%);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 80%;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primario) !important;
+}
+
+/* Tarjetas base unificadas */
+.card-glass {
+    background: var(--fondo-tarjeta) !important;
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--borde) !important;
+    border-radius: 24px !important;
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.4) !important;
+}
+
+.card-glass:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 25px 50px -12px rgba(129, 140, 248, 0.25) !important;
+    border-color: rgba(129, 140, 248, 0.3) !important;
+}
+
+/* Inputs unificados */
+.form-control,
+.form-select {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 1px solid #334155 !important;
+    color: white !important;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background: rgba(0, 0, 0, 0.5) !important;
+    border-color: var(--primario) !important;
+    box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.15) !important;
+    outline: none;
+}
+
+/* Botones unificados */
+.btn-primary-gradient {
+    background: linear-gradient(135deg, var(--primario), var(--primario-oscuro)) !important;
+    border: none !important;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(129, 140, 248, 0.3);
+    color: white !important;
+}
+
+.btn-primary-gradient:hover {
+    background: var(--primario-oscuro) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(129, 140, 248, 0.4);
+}
+
+.btn-outline-glass {
+    border: 1px solid var(--borde) !important;
+    color: #cbd5e1 !important;
+}
+
+.btn-outline-glass:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+}
+
+/* Animaciones */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.reveal {
+    animation: fadeInUp 0.5s ease-out forwards;
+}

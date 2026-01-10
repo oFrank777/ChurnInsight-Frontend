@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChurnInsight - Dashboard</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CSS Unificado -->
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="dashboard.html">
+                <span class="me-2">⚡</span> ChurnInsight
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav gap-2 align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="dashboard.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="registro.html">Nuevo Cliente</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="predictor.html">Predictor</a>
+                    </li>
+                    <li class="nav-item ms-lg-3">
+                        <button onclick="logout()" class="btn btn-outline-glass btn-sm rounded-pill px-3">Salir</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div style="height: 100px;"></div> <!-- Spacer -->
+
+    <!-- Main Content -->
+    <div class="container" style="padding-bottom: 50px;">
+
+        <!-- Welcome Header -->
+        <div class="row mb-5 align-items-end">
+            <div class="col">
+                <h6 class="text-uppercase text-secondary fw-bold mb-1">Vista General</h6>
+                <h1 class="display-5 fw-bold text-white">Panel de Control</h1>
+            </div>
+            <div class="col-auto d-flex gap-2 align-items-center">
+                <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill">
+                    🟢 Sistema Online
+                </span>
+                <button onclick="limpiarBaseDeDatos()" class="btn btn-outline-danger btn-sm rounded-pill px-3"
+                    title="Eliminar todos los datos">
+                    🗑️ Limpiar BD
+                </button>
+            </div>
+        </div>
+
+        <!-- Global Stats Row -->
+        <div class="row g-4 mb-5">
+            <!-- Total Clients -->
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-icon bg-primary bg-opacity-20 text-primary">
+                        👥
+                    </div>
+                    <div class="stat-label">Total Evaluados</div>
+                    <div class="stat-value" id="totalEvaluados">...</div>
+                    <p class="mb-0 text-muted small">Clientes procesados</p>
+                    <p class="mb-0 text-primary small fw-bold" id="rangoIds" style="font-size: 0.75rem;">Cargando...</p>
+                </div>
+            </div>
+            <!-- Churn Rate -->
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-icon bg-danger bg-opacity-20 text-danger">
+                        📉
+                    </div>
+                    <div class="stat-label">Tasa de Abandono</div>
+                    <div class="stat-value" id="tasaChurn">...%</div>
+                    <p class="mb-0 text-muted small">Promedio global</p>
+                </div>
+            </div>
+            <!-- Health -->
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-icon bg-success bg-opacity-20 text-success">
+                        🛡️
+                    </div>
+                    <div class="stat-label">Retención</div>
+                    <div class="stat-value" id="tasaRetencion">...%</div>
+                    <p class="mb-0 text-muted small">Clientes seguros</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de Gráficos Estadísticos -->
+        <div class="row g-4 mb-5">
+            <!-- Gráfico de Dona: Churn vs Retención -->
+            <div class="col-lg-4">
+                <div class="stat-card h-100">
+                    <h5 class="text-white mb-3 fw-bold">📊 Distribución Churn</h5>
+                    <div class="chart-container" style="position: relative; height: 220px;">
+                        <canvas id="graficoChurn"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráfico de Barras: Clientes por Plan -->
+            <div class="col-lg-4">
+                <div class="stat-card h-100">
+                    <h5 class="text-white mb-3 fw-bold">📈 Clientes por Plan</h5>
+                    <div class="chart-container" style="position: relative; height: 220px;">
+                        <canvas id="graficoPlan"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráfico de Barras: Distribución de Riesgo -->
+            <div class="col-lg-4">
+                <div class="stat-card h-100">
+                    <h5 class="text-white mb-3 fw-bold">⚠️ Niveles de Riesgo</h5>
+                    <div class="chart-container" style="position: relative; height: 220px;">
+                        <canvas id="graficoRiesgo"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acciones y Carga Masiva -->
+        <div class="row g-4 mb-5">
+            <!-- Acciones Rápidas -->
+            <div class="col-lg-5">
+                <h4 class="mb-4 text-white">Acciones Rápidas</h4>
+                <div class="row g-3 h-100">
+                    <div class="col-6">
+                        <a href="registro.html" class="action-btn">
+                            <span class="action-icon">✍️</span>
+                            <span class="fw-bold">Nuevo Cliente</span>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="predictor.html" class="action-btn">
+                            <span class="action-icon">🔍</span>
+                            <span class="fw-bold">Consultar ID</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carga Masiva -->
+            <div class="col-lg-7">
+                <h4 class="mb-4 text-white">Carga Masiva (CSV)</h4>
+                <div class="stat-card h-100">
+                    <div class="upload-area" id="dropZone">
+                        <input type="file" id="csvFile" accept=".csv" hidden>
+                        <div class="mb-3" style="font-size: 3rem;">📂</div>
+                        <h5 class="text-white">Arrastra tu CSV aquí</h5>
+                        <p class="text-muted mb-4">o haz click para seleccionar archivo</p>
+                        <button class="btn btn-primary px-4 py-2" onclick="document.getElementById('csvFile').click()">
+                            Seleccionar CSV
+                        </button>
+                    </div>
+                    <div id="uploadStatus" class="mt-3 text-center d-none">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <p class="mt-2 text-white">Procesando lote...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- High Risk Table -->
+        <div class="row" id="highRiskSection">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="text-white mb-0">🚨 Alerta: Clientes de Alto Riesgo</h4>
+                    <div class="d-flex gap-2">
+                        <input type="text" id="tableSearch"
+                            class="form-control form-control-sm bg-dark text-white border-secondary"
+                            placeholder="Buscar ID..." style="width: 150px;">
+                        <button class="btn btn-sm btn-outline-secondary"
+                            onclick="cargarAltoRiesgo()">Actualizar</button>
+                    </div>
+                </div>
+
+                <div class="table-glass">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID Cliente</th>
+                                    <th>Probabilidad</th>
+                                    <th>Plan</th>
+                                    <th>Factores Clave</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="riskTableBody">
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">Cargando datos...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>

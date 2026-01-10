@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChurnInsight - Predictor</title>
+    <!-- Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CSS Unificado -->
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/predictorstyle.css">
+    <!--librerìa para el velocimetro-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-light">
+
+    <!--navbar-->
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="dashboard.html">
+                <span class="me-2">⚡</span> ChurnInsight
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav gap-2 align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="registro.html">Nuevo Cliente</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="predictor.html">Predictor</a>
+                    </li>
+                    <li class="nav-item ms-lg-3">
+                        <button onclick="sessionStorage.clear(); window.location.href='index.html'"
+                            class="btn btn-outline-glass btn-sm rounded-pill px-3">Salir</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div style="height: 100px;"></div> <!-- Spacer -->
+
+    <!--Barra analizar cliente-->
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card card-glass p-3 reveal">
+                    <div class="input-group">
+                        <input type="text" id="customerId" class="form-control"
+                            placeholder="Introduce el ID del cliente">
+                        <button class="btn btn-primary-gradient px-4" type="button" onclick="analizarCliente()">Analizar
+                            Cliente</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Card Perfil del cliente-->
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card card-glass h-100 reveal">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold mb-4 border-bottom pb-2 text-primary">Detalles del Suscriptor</h5>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="info-row"><span>ID Cliente:</span> <span id="resId"
+                                        class="fw-bold">---</span></div>
+                                <div class="info-row"><span>Género:</span> <span id="resGenero"
+                                        class="fw-bold">---</span></div>
+                                <div class="info-row"><span>Plan Actual:</span> <span id="resPlan"
+                                        class="badge bg-info text-dark">---</span></div>
+                                <div class="info-row"><span>Meses Contratado:</span> <span id="resTiempo"
+                                        class="fw-bold">---</span></div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="info-row"><span>Uso Mensual:</span> <span id="resUso" class="fw-bold">---
+                                        hrs</span></div>
+                                <div class="info-row"><span>Tickets Soporte:</span> <span id="resTickets"
+                                        class="fw-bold">---</span></div>
+                                <div class="info-row"><span>Retrasos Pago:</span> <span id="resRetrasos"
+                                        class="fw-bold">--- meses</span></div>
+                                <div class="info-row"><span>Pago Automático:</span> <span id="resAutoPay"
+                                        class="fw-bold">---</span></div>
+                                <div class="info-row"><span>Cambio de Plan:</span> <span id="resCambioPlan"
+                                        class="fw-bold">---</span></div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-top">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Card Churn Prediction-->
+            <div class="col-md-6">
+                <div id="predictionCard" class="card card-glass h-100 reveal" style="border-width: 2px !important;">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold mb-3">Predicción Churn</h5>
+                        <div class="alert alert-danger text-center fw-bold py-2 mb-4">ESTADO DE RIESGO: </div>
+
+                        <div class="gauge-container">
+                            <canvas id="gaugeChart"></canvas>
+                            <div class="gauge-text">
+                                <h2 id="probValue" class="mb-0 fw-bold">0%</h2>
+                                <small class="text-muted">Probabilidad</small>
+                            </div>
+                        </div>
+
+                        <div class="risk-factors mt-4">
+                            <p class="small fw-bold mb-2">Factores de riesgo detectados:</p>
+                            <ul id="riskFactorsList" class="list-unstyled small text-muted">
+                                <!-- Se llenará dinámicamente -->
+                                <li>Cargando análisis...</li>
+                            </ul>
+                        </div>
+
+                        <button class="btn btn-outline-dark w-100 mt-3 fw-bold">Acción Recomendada</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/predictorapp.js"></script>
+</body>
+
+</html>
