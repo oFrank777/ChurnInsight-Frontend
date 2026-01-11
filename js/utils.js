@@ -1,7 +1,7 @@
 /**
  * Configuración global y funciones compartidas
  */
-const URL_API = "http://localhost:8080/predict";
+const URL_API = "https://smooth-lions-press.loca.lt/predict";
 
 /**
  * Maneja errores de fetch de forma centralizada
