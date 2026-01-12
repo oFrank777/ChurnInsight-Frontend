@@ -180,20 +180,30 @@ function inicializarGraficos() {
 
 async function cargarDatosGraficos() {
     try {
-        const datos = await apiFetch('/all-latest');
+        const stats = await apiFetch('/stats-charts');
 
-        let stats = { churn: 0, ret: 0, b: 0, e: 0, p: 0, rB: 0, rM: 0, rA: 0 };
-
-        datos.forEach(item => {
-            if (item.churn) stats.churn++; else stats.ret++;
-            if (item.plan === 'BASICO') stats.b++; else if (item.plan === 'ESTANDAR') stats.e++; else stats.p++;
-            if (item.probabilidad < 0.4) stats.rB++; else if (item.probabilidad < 0.7) stats.rM++; else stats.rA++;
-        });
-
-        if (graficoChurn) { graficoChurn.data.datasets[0].data = [stats.ret, stats.churn]; graficoChurn.update(); }
-        if (graficoPlan) { graficoPlan.data.datasets[0].data = [stats.b, stats.e, stats.p]; graficoPlan.update(); }
-        if (graficoRiesgo) { graficoRiesgo.data.datasets[0].data = [stats.rB, stats.rM, stats.rA]; graficoRiesgo.update(); }
+        if (graficoChurn) {
+            graficoChurn.data.datasets[0].data = [stats.retencion, stats.churn];
+            graficoChurn.update();
+        }
+        if (graficoPlan) {
+            graficoPlan.data.datasets[0].data = [stats.planBasico, stats.planEstandar, stats.planPremium];
+            graficoPlan.update();
+        }
+        if (graficoRiesgo) {
+            graficoRiesgo.data.datasets[0].data = [stats.riesgoBajo, stats.riesgoMedio, stats.riesgoAlto];
+            graficoRiesgo.update();
+        }
     } catch (e) {
         console.error('Error gráficos:', e);
+        // Mostrar aviso visual si fallan los gráficos
+        const container = document.querySelector('.charts-container');
+        if (container && !document.getElementById('chartError')) {
+            const alert = document.createElement('div');
+            alert.id = 'chartError';
+            alert.className = 'alert alert-warning m-3';
+            alert.innerText = '⚠️ No se pudieron cargar algunos gráficos. Intenta recargar la página.';
+            container.prepend(alert);
+        }
     }
 }
