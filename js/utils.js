@@ -1,7 +1,7 @@
 /**
  * Configuración global y funciones compartidas
  */
-const URL_API = "https://cruel-dolls-press.loca.lt/predict";
+const URL_API = "https://mean-lions-camp.loca.lt/predict";
 
 /**
  * Maneja errores de fetch de forma centralizada
