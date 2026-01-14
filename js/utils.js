@@ -1,7 +1,7 @@
 /**
  * Configuración global y funciones compartidas
  */
-const URL_API = "https://sharp-spies-repeat.loca.lt/predict";
+const URL_API = "https://thin-humans-beg.loca.lt/predict";
 
 /**
  * Maneja errores de fetch de forma centralizada
