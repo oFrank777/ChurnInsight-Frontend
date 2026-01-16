@@ -53,12 +53,12 @@ document.getElementById('registroForm').addEventListener('submit', async functio
             body: JSON.stringify(nuevoRegistro)
         });
 
-        alert(`✅ Cliente #${idGenerado} registrado y analizado!\nPrevisión: ${resultado.prevision}`);
+        await notify.success('¡Registro Exitoso!', `Cliente #${idGenerado} ha sido añadido al sistema.`);
         window.location.href = "predictor.html";
 
     } catch (error) {
         console.error("Error al registrar:", error);
-        alert("Error: " + error.message);
+        notify.error("Error al registrar", error.message);
     } finally {
         btnSubmit.innerText = textoOriginal;
         btnSubmit.disabled = false;

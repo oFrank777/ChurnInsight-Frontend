@@ -1,0 +1,17 @@
+/* Colores de soporte para legibilidad en modo oscuro */
+.text-muted {
+    color: #cbd5e1 !important;
+    /* Gris muy claro (slate-300) para labels secundarios */
+}
+
+.small.text-muted {
+    color: #94a3b8 !important;
+    /* Ligeramente más suave para textos extra pequeños */
+}
+
+/* Visibilidad de los labels de las tarjetas de estadísticas */
+.stat-label {
+    color: #e2e8f0 !important;
+    /* Casi blanco para los títulos de las estadísticas */
+    font-weight: 500;
+}

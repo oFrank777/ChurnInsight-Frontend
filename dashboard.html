@@ -10,8 +10,11 @@
     <!-- CSS Unificado -->
     <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/fix-visibility.css">
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -58,10 +61,6 @@
                 <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill">
                     🟢 Sistema Online
                 </span>
-                <button onclick="limpiarBaseDeDatos()" class="btn btn-outline-danger btn-sm rounded-pill px-3"
-                    title="Eliminar todos los datos">
-                    🗑️ Limpiar BD
-                </button>
             </div>
         </div>
 
@@ -69,35 +68,38 @@
         <div class="row g-4 mb-5">
             <!-- Total Clients -->
             <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="stat-icon bg-primary bg-opacity-20 text-primary">
-                        👥
+                <div class="stat-card d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="stat-icon bg-primary bg-opacity-20 text-primary">👥</div>
+                        <div class="stat-label">Total de Clientes</div>
+                        <div class="stat-value" id="totalEvaluados">...</div>
                     </div>
-                    <div class="stat-label">Total Evaluados</div>
-                    <div class="stat-value" id="totalEvaluados">...</div>
-                    <p class="mb-0 text-muted small">Clientes procesados</p>
-                    <p class="mb-0 text-primary small fw-bold" id="rangoIds" style="font-size: 0.75rem;">Cargando...</p>
+                    <div>
+                        <p class="mb-0 text-muted small">Clientes</p>
+                        <p class="mb-0 text-primary small fw-bold" id="rangoIds" style="font-size: 0.75rem;">Cargando...
+                        </p>
+                    </div>
                 </div>
             </div>
             <!-- Churn Rate -->
             <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="stat-icon bg-danger bg-opacity-20 text-danger">
-                        📉
+                <div class="stat-card d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="stat-icon bg-danger bg-opacity-20 text-danger">📉</div>
+                        <div class="stat-label">Tasa de Abandono</div>
+                        <div class="stat-value" id="tasaChurn">...%</div>
                     </div>
-                    <div class="stat-label">Tasa de Abandono</div>
-                    <div class="stat-value" id="tasaChurn">...%</div>
                     <p class="mb-0 text-muted small">Promedio global</p>
                 </div>
             </div>
             <!-- Health -->
             <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="stat-icon bg-success bg-opacity-20 text-success">
-                        🛡️
+                <div class="stat-card d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="stat-icon bg-success bg-opacity-20 text-success">🛡️</div>
+                        <div class="stat-label">Retención</div>
+                        <div class="stat-value" id="tasaRetencion">...%</div>
                     </div>
-                    <div class="stat-label">Retención</div>
-                    <div class="stat-value" id="tasaRetencion">...%</div>
                     <p class="mb-0 text-muted small">Clientes seguros</p>
                 </div>
             </div>
@@ -105,31 +107,26 @@
 
         <!-- Sección de Gráficos Estadísticos -->
         <div class="row g-4 mb-5">
-            <!-- Gráfico de Dona: Churn vs Retención -->
             <div class="col-lg-4">
-                <div class="stat-card h-100">
+                <div class="stat-card">
                     <h5 class="text-white mb-3 fw-bold">📊 Distribución Churn</h5>
-                    <div class="chart-container" style="position: relative; height: 220px;">
+                    <div class="chart-container">
                         <canvas id="graficoChurn"></canvas>
                     </div>
                 </div>
             </div>
-
-            <!-- Gráfico de Barras: Clientes por Plan -->
             <div class="col-lg-4">
-                <div class="stat-card h-100">
+                <div class="stat-card">
                     <h5 class="text-white mb-3 fw-bold">📈 Clientes por Plan</h5>
-                    <div class="chart-container" style="position: relative; height: 220px;">
+                    <div class="chart-container">
                         <canvas id="graficoPlan"></canvas>
                     </div>
                 </div>
             </div>
-
-            <!-- Gráfico de Barras: Distribución de Riesgo -->
             <div class="col-lg-4">
-                <div class="stat-card h-100">
+                <div class="stat-card">
                     <h5 class="text-white mb-3 fw-bold">⚠️ Niveles de Riesgo</h5>
-                    <div class="chart-container" style="position: relative; height: 220px;">
+                    <div class="chart-container">
                         <canvas id="graficoRiesgo"></canvas>
                     </div>
                 </div>
@@ -137,42 +134,40 @@
         </div>
 
         <!-- Acciones y Carga Masiva -->
-        <div class="row g-4 mb-5">
-            <!-- Acciones Rápidas -->
-            <div class="col-lg-5">
+        <div class="row g-4 section-spacer align-items-stretch">
+            <div class="col-lg-5 d-flex flex-column">
                 <h4 class="mb-4 text-white">Acciones Rápidas</h4>
-                <div class="row g-3 h-100">
+                <div class="row g-3 flex-grow-1">
                     <div class="col-6">
-                        <a href="registro.html" class="action-btn">
+                        <a href="registro.html" class="action-btn h-100">
                             <span class="action-icon">✍️</span>
                             <span class="fw-bold">Nuevo Cliente</span>
                         </a>
                     </div>
                     <div class="col-6">
-                        <a href="predictor.html" class="action-btn">
+                        <a href="predictor.html" class="action-btn h-100">
                             <span class="action-icon">🔍</span>
                             <span class="fw-bold">Consultar ID</span>
                         </a>
                     </div>
                 </div>
             </div>
-
-            <!-- Carga Masiva -->
-            <div class="col-lg-7">
+            <div class="col-lg-7 d-flex flex-column">
                 <h4 class="mb-4 text-white">Carga Masiva (CSV)</h4>
-                <div class="stat-card h-100">
+                <div class="stat-card flex-grow-1 d-flex flex-column justify-content-center">
                     <div class="upload-area" id="dropZone">
                         <input type="file" id="csvFile" accept=".csv" hidden>
-                        <div class="mb-3" style="font-size: 3rem;">📂</div>
-                        <h5 class="text-white">Arrastra tu CSV aquí</h5>
-                        <p class="text-muted mb-4">o haz click para seleccionar archivo</p>
-                        <button class="btn btn-primary px-4 py-2" onclick="document.getElementById('csvFile').click()">
-                            Seleccionar CSV
+                        <div class="mb-2" style="font-size: 2rem;">📂</div>
+                        <h6 class="text-white mb-1">Arrastra tu CSV aquí</h6>
+                        <p class="text-muted small mb-3">o haz click para seleccionar</p>
+                        <button class="btn btn-primary btn-sm px-4"
+                            onclick="document.getElementById('csvFile').click()">
+                            Seleccionar
                         </button>
                     </div>
                     <div id="uploadStatus" class="mt-3 text-center d-none">
-                        <div class="spinner-border text-primary" role="status"></div>
-                        <p class="mt-2 text-white">Procesando lote...</p>
+                        <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                        <span class="ms-2 text-white small">Procesando...</span>
                     </div>
                 </div>
             </div>
@@ -181,18 +176,18 @@
         <!-- High Risk Table -->
         <div class="row" id="highRiskSection">
             <div class="col-12">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="text-white mb-0">🚨 Alerta: Clientes de Alto Riesgo</h4>
+                <div class="table-header-actions d-flex justify-content-between align-items-center">
+                    <h4 class="text-white mb-0">🚨 Clientes de Alto Riesgo</h4>
                     <div class="d-flex gap-2">
                         <input type="text" id="tableSearch"
                             class="form-control form-control-sm bg-dark text-white border-secondary"
                             placeholder="Buscar ID..." style="width: 150px;">
-                        <button class="btn btn-sm btn-outline-secondary"
-                            onclick="cargarAltoRiesgo()">Actualizar</button>
+
                     </div>
                 </div>
 
-                <div class="table-glass">
+                <div class="table-glass"
+                    style="border-top: none; border-top-left-radius: 0; border-top-right-radius: 0;">
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>

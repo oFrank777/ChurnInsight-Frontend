@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function analizarCliente() {
     const idABuscar = document.getElementById('customerId').value;
-    if (!idABuscar) return alert("Por favor, introduce un ID válido");
+    if (!idABuscar) return notify.error("ID Requerido", "Por favor, introduce un ID válido para el análisis.");
 
     const btn = document.querySelector('button[onclick="analizarCliente()"]');
     const textoOriginal = btn.innerText;
@@ -27,7 +27,7 @@ async function analizarCliente() {
         actualizarInterfaz(data);
     } catch (error) {
         console.error("Error:", error);
-        alert(error.message);
+        notify.error("Error de Análisis", error.message);
     } finally {
         btn.innerText = textoOriginal;
         btn.disabled = false;

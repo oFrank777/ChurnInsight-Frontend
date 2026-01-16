@@ -18,7 +18,64 @@ document.addEventListener('DOMContentLoaded', () => {
             row.style.display = text.includes(term) ? '' : 'none';
         });
     });
+
+    // Configurar ordenamiento de tabla
+    configurarOrdenamientoTabla();
 });
+
+let datosTablaOriginal = []; // Para mantener copia de los datos
+let ordenActual = { columna: null, ascendente: true };
+
+function configurarOrdenamientoTabla() {
+    const headers = document.querySelectorAll('.table-glass thead th');
+    headers.forEach((th, index) => {
+        if (index < 3) { // Solo ID, Probabilidad y Plan son ordenables
+            th.style.cursor = 'pointer';
+            th.addEventListener('click', () => ordenarTabla(index));
+            th.title = "Click para ordenar";
+        }
+    });
+}
+
+function ordenarTabla(colIndex) {
+    const cuerpoTabla = document.getElementById('riskTableBody');
+    const filas = Array.from(cuerpoTabla.querySelectorAll('tr'));
+
+    // Si ya estábamos ordenando por esta columna, invertimos el sentido
+    if (ordenActual.columna === colIndex) {
+        ordenActual.ascendente = !ordenActual.ascendente;
+    } else {
+        ordenActual.columna = colIndex;
+        ordenActual.ascendente = true;
+    }
+
+    // Actualizar iconos visuales en headers
+    document.querySelectorAll('.table-glass thead th').forEach((th, idx) => {
+        const baseText = th.innerText.replace(' ▲', '').replace(' ▼', '');
+        if (idx === colIndex) {
+            th.innerText = baseText + (ordenActual.ascendente ? ' ▲' : ' ▼');
+        } else {
+            th.innerText = baseText;
+        }
+    });
+
+    filas.sort((a, b) => {
+        let valA = a.cells[colIndex].innerText.replace('#', '').replace('%', '').trim();
+        let valB = b.cells[colIndex].innerText.replace('#', '').replace('%', '').trim();
+
+        // Convertir a número si es posible
+        if (!isNaN(valA) && !isNaN(valB)) {
+            valA = parseFloat(valA);
+            valB = parseFloat(valB);
+        }
+
+        if (valA < valB) return ordenActual.ascendente ? -1 : 1;
+        if (valA > valB) return ordenActual.ascendente ? 1 : -1;
+        return 0;
+    });
+
+    cuerpoTabla.append(...filas);
+}
 
 async function cargarEstadisticas() {
     try {
@@ -73,7 +130,7 @@ async function cargarAltoRiesgo() {
                 : 'Sin factores detectados';
 
             fila.innerHTML = `
-                <td class="fw-bold text-white">#${item.idCliente}</td>
+                <td class="id-highlight">#${item.idCliente}</td>
                 <td><span class="badge bg-danger">${format.percent(item.probabilidad)}</span></td>
                 <td><span class="badge ${clasePlan}">${planVisual}</span></td>
                 <td class="small text-muted">${factoresVisual}</td>
@@ -124,30 +181,19 @@ async function procesarCSV(archivo) {
             body: formData
         });
 
-        alert(`✅ Proceso completado!\nSe analizaron ${resultadosLote.length} clientes.`);
+        notify.success('Carga Completada', `Se han procesado ${resultadosLote.length} clientes correctamente.`);
         cargarEstadisticas();
         cargarAltoRiesgo();
         cargarDatosGraficos();
     } catch (error) {
-        alert("Error procesando archivo: " + error.message);
+        notify.error("Error en Carga Masiva", error.message);
     } finally {
         divEstado?.classList.add('d-none');
         if (document.getElementById('csvFile')) document.getElementById('csvFile').value = '';
     }
 }
 
-async function limpiarBaseDeDatos() {
-    if (!confirm('⚠️ ¿Estás SEGURO de que deseas ELIMINAR TODOS los datos?') ||
-        !confirm('🚨 ÚLTIMA CONFIRMACIÓN: Esta acción NO se puede deshacer.')) return;
 
-    try {
-        await apiFetch('/all', { method: 'DELETE' });
-        alert('✅ Base de datos limpiada exitosamente.');
-        window.location.reload();
-    } catch (error) {
-        alert('❌ Error: ' + error.message);
-    }
-}
 
 // ========== GRÁFICOS ==========
 let graficoChurn, graficoPlan, graficoRiesgo;
