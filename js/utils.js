@@ -1,7 +1,7 @@
 /**
  * Configuración global y funciones compartidas
  */
-const URL_API = "http://localhost:8080/predict";
+const URL_API = "https://churninsight-backend-production.up.railway.app/predict";
 const API_TIMEOUT = 15000; // 15 segundos
 
 /**
