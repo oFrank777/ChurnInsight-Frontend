@@ -125,9 +125,8 @@ async function cargarAltoRiesgo() {
                 planVisual === 'ESTANDAR' ? 'bg-info' :
                     planVisual === 'BASICO' ? 'bg-secondary' : 'bg-dark';
 
-            const factoresVisual = item.factores && item.factores.length > 0
-                ? item.factores.slice(0, 2).join(', ') + (item.factores.length > 2 ? '...' : '')
-                : 'Sin factores detectados';
+            const textoCompleto = item.factores && item.factores.length > 0 ? item.factores.join('. ') : 'Sin factores detectados';
+            const factoresVisual = textoCompleto.length > 50 ? textoCompleto.substring(0, 47) + '...' : textoCompleto;
 
             fila.innerHTML = `
                 <td class="id-highlight">#${item.idCliente}</td>

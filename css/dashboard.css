@@ -135,11 +135,11 @@ body::before {
 }
 
 .stat-label {
-    color: #94a3b8;
+    color: #e2e8f0 !important;
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 1px;
-    font-weight: 700;
+    font-weight: 500;
 }
 
 .stat-value {
@@ -149,6 +149,14 @@ body::before {
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+.text-muted {
+    color: #cbd5e1 !important;
+}
+
+.small.text-muted {
+    color: #94a3b8 !important;
 }
 
 /* Botones de Acción Refactorizados */

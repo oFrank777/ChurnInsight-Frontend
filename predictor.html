@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChurnInsight - Predictor</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- CSS Unificado -->
@@ -14,6 +16,65 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        #btnRecommendation {
+            position: relative !important;
+            z-index: 100 !important;
+            cursor: pointer !important;
+            pointer-events: auto !important;
+            transition: all 0.3s ease !important;
+        }
+
+        #btnRecommendation:hover {
+            transform: translateY(-3px) scale(1.02) !important;
+            box-shadow: 0 10px 25px rgba(129, 140, 248, 0.4) !important;
+            filter: brightness(1.2) !important;
+        }
+
+        /* Estilos Perfil Suscriptor Mejorados */
+        .subscriber-info-card {
+            background: rgba(255, 255, 255, 0.03) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            border-radius: 20px !important;
+            padding: 24px 15px !important;
+            text-align: center !important;
+            transition: all 0.3s ease !important;
+            height: 100% !important;
+            backdrop-filter: blur(4px) !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+
+        .subscriber-info-card:hover {
+            background: rgba(129, 140, 248, 0.1) !important;
+            border-color: rgba(129, 140, 248, 0.3) !important;
+            transform: translateY(-5px) !important;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .subscriber-info-card i {
+            font-size: 1.6rem !important;
+            display: block !important;
+            margin-bottom: 12px !important;
+            color: var(--primario) !important;
+        }
+
+        .subscriber-info-card small {
+            display: block !important;
+            color: #94a3b8 !important;
+            font-size: 0.7rem !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1px !important;
+            margin-bottom: 4px !important;
+        }
+
+        .subscriber-info-card span {
+            font-size: 1.05rem !important;
+            color: white !important;
+        }
+    </style>
 </head>
 
 <body class="bg-light">
@@ -69,35 +130,79 @@
             <div class="col-md-6">
                 <div class="card card-glass h-100 reveal">
                     <div class="card-body">
-                        <h5 class="card-title fw-bold mb-4 border-bottom pb-2 text-primary">Detalles del Suscriptor</h5>
+                        <h5 class="card-title fw-bold mb-4 border-bottom pb-3 d-flex align-items-center">
+                            <i class="fas fa-user-circle me-2 text-primary"></i> Perfil del Suscriptor
+                        </h5>
 
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="info-row"><span>ID Cliente:</span> <span id="resId"
-                                        class="fw-bold">---</span></div>
-                                <div class="info-row"><span>Género:</span> <span id="resGenero"
-                                        class="fw-bold">---</span></div>
-                                <div class="info-row"><span>Plan Actual:</span> <span id="resPlan"
-                                        class="badge bg-info text-dark">---</span></div>
-                                <div class="info-row"><span>Meses Contratado:</span> <span id="resTiempo"
-                                        class="fw-bold">---</span></div>
+                        <div class="row g-3">
+                            <!-- Datos Principales -->
+                            <div class="col-6 col-sm-4">
+                                <div class="subscriber-info-card">
+                                    <i class="fas fa-id-badge text-muted mb-2"></i>
+                                    <small>ID Cliente</small>
+                                    <span id="resId" class="fw-bold d-block text-white">---</span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4">
+                                <div class="subscriber-info-card">
+                                    <i class="fas fa-venus-mars text-muted mb-2"></i>
+                                    <small>Género</small>
+                                    <span id="resGenero" class="fw-bold d-block text-white">---</span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4">
+                                <div class="subscriber-info-card">
+                                    <i class="fas fa-crown text-warning mb-2"></i>
+                                    <small>Plan Actual</small>
+                                    <span id="resPlan" class="badge bg-info text-dark d-block">---</span>
+                                </div>
                             </div>
 
-                            <div class="col-sm-6">
-                                <div class="info-row"><span>Uso Mensual:</span> <span id="resUso" class="fw-bold">---
-                                        hrs</span></div>
-                                <div class="info-row"><span>Tickets Soporte:</span> <span id="resTickets"
-                                        class="fw-bold">---</span></div>
-                                <div class="info-row"><span>Retrasos Pago:</span> <span id="resRetrasos"
-                                        class="fw-bold">--- meses</span></div>
-                                <div class="info-row"><span>Pago Automático:</span> <span id="resAutoPay"
-                                        class="fw-bold">---</span></div>
-                                <div class="info-row"><span>Cambio de Plan:</span> <span id="resCambioPlan"
-                                        class="fw-bold">---</span></div>
+                            <!-- Métricas de Uso -->
+                            <div class="col-6 col-sm-4">
+                                <div class="subscriber-info-card">
+                                    <i class="fas fa-calendar-alt text-muted mb-2"></i>
+                                    <small>Antigüedad</small>
+                                    <span id="resTiempo" class="fw-bold d-block text-white">---</span>
+                                </div>
                             </div>
-                        </div>
+                            <div class="col-6 col-sm-4">
+                                <div class="subscriber-info-card">
+                                    <i class="fas fa-chart-line text-muted mb-2"></i>
+                                    <small>Uso Mensual</small>
+                                    <span id="resUso" class="fw-bold d-block text-white">--- hrs</span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4">
+                                <div class="subscriber-info-card">
+                                    <i class="fas fa-headset text-muted mb-2"></i>
+                                    <small>Tickets</small>
+                                    <span id="resTickets" class="fw-bold d-block text-white">---</span>
+                                </div>
+                            </div>
 
-                        <div class="mt-4 pt-3 border-top">
+                            <!-- Estado Financiero -->
+                            <div class="col-6 col-sm-4">
+                                <div class="subscriber-info-card">
+                                    <i class="fas fa-exclamation-triangle text-danger mb-2"></i>
+                                    <small>Retrasos Pago</small>
+                                    <span id="resRetrasos" class="fw-bold d-block text-white">---</span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4">
+                                <div class="subscriber-info-card">
+                                    <i class="fas fa-credit-card text-muted mb-2"></i>
+                                    <small>Pago Auto.</small>
+                                    <span id="resAutoPay" class="fw-bold d-block text-white">---</span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4">
+                                <div class="subscriber-info-card">
+                                    <i class="fas fa-exchange-alt text-muted mb-2"></i>
+                                    <small>Cambio Plan</small>
+                                    <span id="resCambioPlan" class="fw-bold d-block text-white">---</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -126,7 +231,8 @@
                             </ul>
                         </div>
 
-                        <button class="btn btn-outline-dark w-100 mt-3 fw-bold">Acción Recomendada</button>
+                        <button id="btnRecommendation" class="btn btn-primary-gradient w-100 mt-3 fw-bold">Acción
+                            Recomendada</button>
                     </div>
                 </div>
             </div>

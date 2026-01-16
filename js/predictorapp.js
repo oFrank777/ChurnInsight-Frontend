@@ -11,11 +11,26 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('customerId').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') analizarCliente();
     });
+
+    // Inicializar botón de recomendación desde el inicio
+    const btnAccion = document.getElementById('btnRecommendation');
+    if (btnAccion) {
+        btnAccion.onclick = mostrarRecomendacion;
+    }
 });
 
 async function analizarCliente() {
-    const idABuscar = document.getElementById('customerId').value;
+    const idABuscar = document.getElementById('customerId').value.trim();
     if (!idABuscar) return notify.error("ID Requerido", "Por favor, introduce un ID válido para el análisis.");
+
+    // Validación de número y rango
+    if (!/^\d+$/.test(idABuscar)) {
+        return notify.error("ID Inválido", "El ID debe contener solo números.");
+    }
+
+    if (parseInt(idABuscar) > 2147483647) {
+        return notify.error("ID fuera de rango", "El identificador es demasiado largo. Introduce un número menor.");
+    }
 
     const btn = document.querySelector('button[onclick="analizarCliente()"]');
     const textoOriginal = btn.innerText;
@@ -34,7 +49,10 @@ async function analizarCliente() {
     }
 }
 
+let currentDataIA = null;
+
 function actualizarInterfaz(datos) {
+    currentDataIA = datos; // Guardamos para la acción recomendada
     // Mapeo de propiedades del Backend a la UI
     document.getElementById('resId').innerText = datos.idCliente || 'N/A';
     const generoMap = { 'MASCULINO': 'Hombre', 'FEMENINO': 'Mujer' };
@@ -72,7 +90,48 @@ function actualizarInterfaz(datos) {
         contenedorFactores.innerHTML = '<li class="text-success">✅ Sin factores de riesgo detectados</li>';
     }
 
+    // Activar botón de acción
+    const btnAccion = document.getElementById('btnRecommendation');
+    if (btnAccion) {
+        btnAccion.onclick = mostrarRecomendacion;
+        btnAccion.classList.remove('disabled', 'opacity-50');
+    }
+
     actualizarGrafico(porcentajeProb);
+}
+
+function mostrarRecomendacion() {
+    if (!currentDataIA || !currentDataIA.accionRecomendada) {
+        return notify.error("Análisis Pendiente", "Por favor, analiza primero al cliente usando su ID para que la IA pueda generar una recomendación estratégica.");
+    }
+
+    Swal.fire({
+        icon: 'info',
+        title: 'Estrategia de Retención Sugerida',
+        html: `
+            <div class="text-start mt-3">
+                <p class="mb-2"><strong>Se recomienda la siguiente acción proactiva:</strong></p>
+                <div class="alert alert-info border-0 shadow-sm mb-0" style="background: rgba(129, 140, 248, 0.1); color: #818cf8; font-size: 1.1rem; border-left: 4px solid #818cf8 !important; border-radius: 12px;">
+                    <i class="fas fa-lightbulb me-2"></i> ${currentDataIA.accionRecomendada}
+                </div>
+                <p class="small text-muted mt-3">
+                    * Esta sugerencia se basa en el análisis profundo del comportamiento histórico y actual del suscriptor.
+                </p>
+            </div>
+        `,
+        background: '#1e293b',
+        color: '#f8fafc',
+        confirmButtonColor: '#818cf8',
+        confirmButtonText: 'Entendido, aplicar',
+        borderRadius: '24px',
+        backdrop: `rgba(15, 23, 42, 0.9)`,
+        target: 'body', // Forzar que se ancle al body
+        didOpen: () => {
+            // Forzar z-index máximo en el contenedor de SweetAlert manualmente
+            const container = document.querySelector('.swal2-container');
+            if (container) container.style.zIndex = '99999';
+        }
+    });
 }
 
 let miGrafico;
