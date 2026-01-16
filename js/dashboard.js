@@ -174,18 +174,36 @@ async function procesarCSV(archivo) {
     const formData = new FormData();
     formData.append('file', archivo);
 
+    // Timeout extendido para carga masiva (2 minutos)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 120000);
+
     try {
-        const resultadosLote = await apiFetch('/batch', {
+        const response = await fetch(`${URL_API}/batch`, {
             method: 'POST',
-            body: formData
+            body: formData,
+            signal: controller.signal,
+            headers: { 'bypass-tunnel-reminder': 'true' }
         });
 
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ message: 'Error en el servidor' }));
+            throw new Error(errorData.message);
+        }
+
+        const resultadosLote = await response.json();
         notify.success('Carga Completada', `Se han procesado ${resultadosLote.length} clientes correctamente.`);
         cargarEstadisticas();
         cargarAltoRiesgo();
         cargarDatosGraficos();
     } catch (error) {
-        notify.error("Error en Carga Masiva", error.message);
+        if (error.name === 'AbortError') {
+            notify.error("Timeout", "La carga está tomando demasiado tiempo. El servidor puede estar procesando en segundo plano.");
+        } else {
+            notify.error("Error en Carga Masiva", error.message);
+        }
     } finally {
         divEstado?.classList.add('d-none');
         if (document.getElementById('csvFile')) document.getElementById('csvFile').value = '';
