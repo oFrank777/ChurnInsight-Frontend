@@ -1,0 +1,11 @@
+{
+    "name": "churninsight-frontend",
+    "version": "1.0.0",
+    "description": "ChurnInsight Frontend - Predicción de Churn con IA",
+    "scripts": {
+        "start": "serve ."
+    },
+    "dependencies": {
+        "serve": "^14.2.0"
+    }
+}
