@@ -1,7 +1,13 @@
-// Auto-cargar cliente si viene ID en la URL
+// Auto-cargar cliente si viene ID en la URL o sessionStorage
 document.addEventListener('DOMContentLoaded', () => {
     const parametrosUrl = new URLSearchParams(window.location.search);
-    const idCliente = parametrosUrl.get('id');
+    let idCliente = parametrosUrl.get('id');
+
+    // Si no hay ID en URL, intentar leer de sessionStorage (vino desde dashboard)
+    if (!idCliente) {
+        idCliente = sessionStorage.getItem('clienteIdAnalizar');
+        sessionStorage.removeItem('clienteIdAnalizar'); // Limpiar después de usar
+    }
 
     if (idCliente) {
         document.getElementById('customerId').value = idCliente;

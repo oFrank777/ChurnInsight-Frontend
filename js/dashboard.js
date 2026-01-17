@@ -26,6 +26,12 @@ document.addEventListener('DOMContentLoaded', () => {
 let datosTablaOriginal = []; // Para mantener copia de los datos
 let ordenActual = { columna: null, ascendente: true };
 
+// Función para ver detalle de un cliente (guarda ID en sessionStorage)
+function verDetalle(idCliente) {
+    sessionStorage.setItem('clienteIdAnalizar', idCliente);
+    window.location.href = 'predictor.html';
+}
+
 function configurarOrdenamientoTabla() {
     const headers = document.querySelectorAll('.table-glass thead th');
     headers.forEach((th, index) => {
@@ -134,7 +140,7 @@ async function cargarAltoRiesgo() {
                 <td><span class="badge ${clasePlan}">${planVisual}</span></td>
                 <td class="small text-muted">${factoresVisual}</td>
                 <td>
-                    <a href="predictor.html?id=${item.idCliente}" class="btn btn-sm btn-outline-primary">Ver Detalle</a>
+                    <button onclick="verDetalle(${item.idCliente})" class="btn btn-sm btn-outline-primary">Ver Detalle</button>
                 </td>
             `;
             cuerpoTabla.appendChild(fila);
