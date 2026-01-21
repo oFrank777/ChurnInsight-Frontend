@@ -180,9 +180,9 @@ async function procesarCSV(archivo) {
     const formData = new FormData();
     formData.append('file', archivo);
 
-    // Timeout extendido para carga masiva (2 minutos)
+    // Timeout extendido para carga masiva (10 minutos)
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 120000);
+    const timeoutId = setTimeout(() => controller.abort(), 600000);
 
     try {
         const response = await fetch(`${URL_API}/batch`, {

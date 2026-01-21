@@ -2,7 +2,7 @@
  * Configuración global y funciones compartidas
  */
 const URL_API = "https://churninsight-backend-production.up.railway.app/predict";
-const API_TIMEOUT = 15000; // 15 segundos
+const API_TIMEOUT = 60000; // 60 segundos
 
 /**
  * Maneja errores de fetch de forma centralizada con soporte para Timeouts
