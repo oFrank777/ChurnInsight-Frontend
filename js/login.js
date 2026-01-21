@@ -19,7 +19,7 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
             // Redirigir al Dashboard
             window.location.href = "dashboard.html";
         } else {
-            notify.error("Credenciales incorrectas", "Prueba con: admin@churn.com / Contraseña12345");
+            notify.error("Credenciales incorrectas", "El usuario o la contraseña no son válidos. Inténtalo de nuevo.");
             btn.innerText = originalText;
             btn.disabled = false;
         }
