@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "ChurnInsight Frontend - Predicción de Churn con IA",
     "scripts": {
-        "start": "npx serve . -s"
+        "start": "npx serve ."
     },
     "dependencies": {
         "serve": "^14.2.0"
